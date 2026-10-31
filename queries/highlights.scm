@@ -206,3 +206,11 @@
   name: (identifier) @function)
 (action_call_statement
   name: (identifier) @function.call)
+
+; ---------------------------------------------------------------------------
+; B&R: dynamic variables (REFERENCE TO, ACCESS)
+; ---------------------------------------------------------------------------
+(reference_to_type
+  "REFERENCE" @keyword)
+(access_statement
+  "ACCESS" @keyword)

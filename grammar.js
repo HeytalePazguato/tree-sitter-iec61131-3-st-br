@@ -41,8 +41,25 @@ export default grammar(base, {
 
     // B&R calls an action without parentheses (`ResetAxis;`). Low precedence so it never
     // shadows an assignment or a call.
-    _statement: ($, original) => choice(original, $.action_call_statement),
+    _statement: ($, original) =>
+      choice(original, $.action_call_statement, $.access_statement),
 
     action_call_statement: ($) => prec(-1, seq(field('name', $.identifier), ';')),
+
+    // The base only knows `REF_TO`; B&R spells it `REFERENCE TO`. Same node name and
+    // field as the Beckhoff dialect so both expose identical nodes.
+    _type_specifier: ($, original) => choice(original, $.reference_to_type),
+
+    reference_to_type: ($) =>
+      seq(kw('REFERENCE'), kw('TO'), field('target', $._type_specifier)),
+
+    // Binds a dynamic variable to an address: `pMotor ACCESS ADR(gMotor);`.
+    access_statement: ($) =>
+      seq(
+        field('target', $._expression),
+        kw('ACCESS'),
+        field('address', $._expression),
+        ';',
+      ),
   },
 });

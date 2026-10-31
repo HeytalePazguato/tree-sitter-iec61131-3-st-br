@@ -160,6 +160,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "access_statement",
+        "named": true
+      },
+      {
         "type": "action_call_statement",
         "named": true
       },
@@ -247,6 +251,10 @@
       },
       {
         "type": "qualified_identifier",
+        "named": true
+      },
+      {
+        "type": "reference_to_type",
         "named": true
       },
       {
@@ -363,6 +371,32 @@
     "type": "access_direction",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "access_statement",
+    "named": true,
+    "fields": {
+      "address": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_expression",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "action_body",
@@ -1710,6 +1744,22 @@
     }
   },
   {
+    "type": "reference_to_type",
+    "named": true,
+    "fields": {
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_type_specifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "reference_type",
     "named": true,
     "fields": {
@@ -2624,6 +2674,10 @@
     "named": false
   },
   {
+    "type": "ACCESS",
+    "named": false
+  },
+  {
     "type": "ACTION",
     "named": false
   },
@@ -2993,6 +3047,10 @@
   },
   {
     "type": "REAL",
+    "named": false
+  },
+  {
+    "type": "REFERENCE",
     "named": false
   },
   {

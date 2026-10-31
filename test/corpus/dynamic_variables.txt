@@ -1,0 +1,118 @@
+================================================================================
+REFERENCE TO a function block and a scalar
+================================================================================
+
+VAR
+    pMotor : REFERENCE TO FB_Motor;
+    refA : REFERENCE TO DINT;
+END_VAR
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (var_block
+    (variable_declaration
+      names: (identifier)
+      type: (reference_to_type
+        target: (identifier)))
+    (variable_declaration
+      names: (identifier)
+      type: (reference_to_type
+        target: (elementary_type)))))
+
+================================================================================
+REFERENCE TO an array
+================================================================================
+
+VAR
+    pData : REFERENCE TO ARRAY[0..9] OF INT;
+END_VAR
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (var_block
+    (variable_declaration
+      names: (identifier)
+      type: (reference_to_type
+        target: (array_type
+          range: (subrange
+            lower: (integer_literal)
+            upper: (integer_literal))
+          element_type: (elementary_type))))))
+
+================================================================================
+ACCESS binds a reference to an address
+================================================================================
+
+PROGRAM _CYCLIC
+    pMotor ACCESS ADR(gMotor);
+    pData ACCESS pAddr;
+    refTable ACCESS ADR(aTable[3]);
+END_PROGRAM
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (program_declaration
+    name: (identifier)
+    body: (access_statement
+      target: (identifier)
+      address: (address_of_expression
+        operand: (identifier)))
+    body: (access_statement
+      target: (identifier)
+      address: (identifier))
+    body: (access_statement
+      target: (identifier)
+      address: (address_of_expression
+        operand: (index_expression
+          object: (identifier)
+          index: (integer_literal))))))
+
+================================================================================
+Reads and writes through a reference
+================================================================================
+
+PROGRAM _CYCLIC
+    pMotor.Enable := TRUE;
+    refTable[nIdx] := nIdx * 2;
+END_PROGRAM
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (program_declaration
+    name: (identifier)
+    body: (assignment_statement
+      left: (member_access_expression
+        object: (identifier)
+        member: (identifier))
+      right: (boolean_literal))
+    body: (assignment_statement
+      left: (index_expression
+        object: (identifier)
+        index: (identifier))
+      right: (binary_expression
+        left: (identifier)
+        right: (integer_literal)))))
+
+================================================================================
+ACCESS inside an identifier stays an identifier
+================================================================================
+
+PROGRAM _CYCLIC
+    AccessLevel := 1;
+    ResetAxis;
+END_PROGRAM
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (program_declaration
+    name: (identifier)
+    body: (assignment_statement
+      left: (identifier)
+      right: (integer_literal))
+    body: (action_call_statement
+      name: (identifier))))
