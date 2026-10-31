@@ -21,6 +21,28 @@ export default grammar(base, {
         $.type_declaration,
         $.namespace_declaration,
         $.configuration_declaration,
+        $.action_declaration,
       ),
+
+    // The base has no ACTION construct. Same node name and fields as the Beckhoff
+    // dialect so both expose identical nodes; `owner` is optional because B&R action
+    // files are stored beside their program.
+    action_declaration: ($) =>
+      seq(
+        kw('ACTION'),
+        optional(seq(field('owner', $.identifier), '.')),
+        field('name', $.identifier),
+        optional(':'),
+        optional(field('body', $.action_body)),
+        kw('END_ACTION'),
+      ),
+
+    action_body: ($) => repeat1($._statement),
+
+    // B&R calls an action without parentheses (`ResetAxis;`). Low precedence so it never
+    // shadows an assignment or a call.
+    _statement: ($, original) => choice(original, $.action_call_statement),
+
+    action_call_statement: ($) => prec(-1, seq(field('name', $.identifier), ';')),
   },
 });

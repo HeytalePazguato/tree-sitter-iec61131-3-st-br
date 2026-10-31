@@ -109,6 +109,7 @@
 ; Top-level / POU
 [
   "PROGRAM" "END_PROGRAM"
+  "ACTION" "END_ACTION"
   "FUNCTION" "END_FUNCTION"
   "FUNCTION_BLOCK" "END_FUNCTION_BLOCK"
   "INTERFACE" "END_INTERFACE"
@@ -195,3 +196,13 @@
 [ "(" ")" "[" "]" ] @punctuation.bracket
 [ "," ":" ";" "."  ] @punctuation.delimiter
 "#" @punctuation.special
+
+; ---------------------------------------------------------------------------
+; B&R: actions
+; ---------------------------------------------------------------------------
+(action_declaration
+  owner: (identifier) @type)
+(action_declaration
+  name: (identifier) @function)
+(action_call_statement
+  name: (identifier) @function.call)
