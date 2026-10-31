@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Top-level `VAR` blocks for `.var` files: `VAR`, `VAR CONSTANT`, `VAR_GLOBAL RETAIN` and the other block kinds parse as direct children of `source_file`, covered by the `var_files` corpus (array and struct initialisers, `AT %IX0.0` addresses). The base `global_var_declaration_block` wrapper is dropped from `_declaration` so a top-level `VAR_GLOBAL` yields a bare `var_global` node.
 - Pass-through grammar extending `tree-sitter-iec61131-3-st` with no new rules, its own copy of the base external scanner (`src/scanner.c`, symbols renamed), the committed generated parser, the base highlights query, the `standard_passthrough` corpus (including the `MISSING "END_IF"` recovery case) and the `file_forms` corpus proving that B&R `_INIT`/`_CYCLIC`/`_EXIT` programs, `.fun` interfaces, function block implementation files and `.typ` files already parse with base node types.
 - npm package manifest (`type: module`, `tree-sitter-iec61131-3-st ~0.1.2` dependency, `tree-sitter-cli` pinned `~0.27.1`) with a committed `package-lock.json`, and `tree-sitter.json` grammar metadata (file types `st`, `fun`, `var`, `typ`, `fub`, `stpp`).
 - CI on Node 24 and 26 across Linux, macOS and Windows, a wasm build job, and a `workflow-lint` job (actionlint and zizmor).

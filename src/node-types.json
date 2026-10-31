@@ -38,10 +38,6 @@
         "named": true
       },
       {
-        "type": "global_var_declaration_block",
-        "named": true
-      },
-      {
         "type": "interface_declaration",
         "named": true
       },
@@ -1008,21 +1004,6 @@
     "fields": {}
   },
   {
-    "type": "global_var_declaration_block",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "var_global",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "if_statement",
     "named": true,
     "fields": {
@@ -1362,6 +1343,10 @@
       "types": [
         {
           "type": "_declaration",
+          "named": true
+        },
+        {
+          "type": "_var_block",
           "named": true
         },
         {
@@ -1762,6 +1747,10 @@
       "types": [
         {
           "type": "_declaration",
+          "named": true
+        },
+        {
+          "type": "_var_block",
           "named": true
         },
         {

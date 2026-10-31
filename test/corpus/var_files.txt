@@ -1,0 +1,126 @@
+================================================================================
+Program variable file with VAR and VAR CONSTANT
+================================================================================
+
+VAR
+    nCounter : DINT := 0;
+    bEnable : BOOL := FALSE;
+    aValues : ARRAY[0..9] OF INT;
+    tonDelay : TON;
+END_VAR
+
+VAR CONSTANT
+    PROBE_MAX : INT := 10;
+END_VAR
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (var_block
+    (variable_declaration
+      (identifier)
+      (elementary_type)
+      (integer_literal))
+    (variable_declaration
+      (identifier)
+      (elementary_type)
+      (boolean_literal))
+    (variable_declaration
+      (identifier)
+      (array_type
+        (subrange
+          (integer_literal)
+          (integer_literal))
+        (elementary_type)))
+    (variable_declaration
+      (identifier)
+      (identifier)))
+  (var_block
+    (var_qualifier_list
+      (var_qualifier))
+    (variable_declaration
+      (identifier)
+      (elementary_type)
+      (integer_literal))))
+
+================================================================================
+Package global variable file with VAR_GLOBAL RETAIN
+================================================================================
+
+VAR_GLOBAL RETAIN
+    gPersist : UDINT;
+END_VAR
+
+VAR_GLOBAL
+    gMotor : FB_Motor;
+END_VAR
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (var_global
+    (var_qualifier_list
+      (var_qualifier))
+    (variable_declaration
+      (identifier)
+      (elementary_type)))
+  (var_global
+    (variable_declaration
+      (identifier)
+      (identifier))))
+
+================================================================================
+Array and struct initialisers
+================================================================================
+
+VAR
+    aLimits : ARRAY[0..2] OF INT := [10, 20, 30];
+    stCfg : Config_typ := (nSpeed := 100, bEnable := TRUE);
+END_VAR
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (var_block
+    (variable_declaration
+      (identifier)
+      (array_type
+        (subrange
+          (integer_literal)
+          (integer_literal))
+        (elementary_type))
+      (integer_literal)
+      (integer_literal)
+      (integer_literal))
+    (variable_declaration
+      (identifier)
+      (identifier)
+      (structure_initializer
+        (structure_initializer_field
+          (identifier)
+          (integer_literal))
+        (structure_initializer_field
+          (identifier)
+          (boolean_literal))))))
+
+================================================================================
+Located variables with AT addresses
+================================================================================
+
+VAR
+    bStart AT %IX0.0 : BOOL;
+    nOut AT %QW1 : INT;
+END_VAR
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (var_block
+    (variable_declaration
+      (identifier)
+      (direct_address)
+      (elementary_type))
+    (variable_declaration
+      (identifier)
+      (direct_address)
+      (elementary_type))))

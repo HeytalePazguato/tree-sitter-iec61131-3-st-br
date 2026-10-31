@@ -15,20 +15,29 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_declaration"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_declaration"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "using_directive"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "pragma"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
         },
         {
           "type": "SYMBOL",
-          "name": "using_directive"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "pragma"
-        },
-        {
-          "type": "STRING",
-          "value": ";"
+          "name": "_var_block"
         }
       ]
     },
@@ -4383,10 +4392,6 @@
         {
           "type": "SYMBOL",
           "name": "configuration_declaration"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "global_var_declaration_block"
         }
       ]
     },
