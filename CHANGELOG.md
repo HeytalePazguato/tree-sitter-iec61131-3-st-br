@@ -9,13 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Pass-through grammar extending `tree-sitter-iec61131-3-st` with no new rules, its own copy of the base external scanner (`src/scanner.c`, symbols renamed), the committed generated parser, the base highlights query, the `standard_passthrough` corpus (including the `MISSING "END_IF"` recovery case) and the `file_forms` corpus proving that B&R `_INIT`/`_CYCLIC`/`_EXIT` programs, `.fun` interfaces, function block implementation files and `.typ` files already parse with base node types.
 - npm package manifest (`type: module`, `tree-sitter-iec61131-3-st ~0.1.2` dependency, `tree-sitter-cli` pinned `~0.27.1`) with a committed `package-lock.json`, and `tree-sitter.json` grammar metadata (file types `st`, `fun`, `var`, `typ`, `fub`, `stpp`).
-- CI on Node 24 and 26 across Linux, macOS and Windows, a wasm build job, and a `workflow-lint` job (actionlint and zizmor). The generate, test and wasm steps are guarded on the presence of `grammar.js` until the grammar lands.
+- CI on Node 24 and 26 across Linux, macOS and Windows, a wasm build job, and a `workflow-lint` job (actionlint and zizmor).
 - Dependabot for npm, GitHub Actions and the docs toolchain, targeting `develop` with a 7-day cooldown.
 - Hash-locked docs toolchain (`docs/requirements.txt`) for the MkDocs site.
 
 ### Changed
 
+- CI now really runs the stale-generation check, `npm test` and the wasm build; the `grammar.js` guards are gone. The wasm job builds and uploads the wasm only: `test:wasm` and `check:contract` join it with tasks 3.2 and 2.6.
+- `npm test` runs `tree-sitter test` only until task 3.1 adds the Node binding tests.
 - All GitHub Actions are pinned by commit SHA and workflows run with least-privilege permissions.
 - `prerelease.yml` and `release.yml` keep the `0.0.0` sentinel and idempotence guards; npm publishing with Trusted Publishing is not wired yet.
 - README, `mkdocs.yml` and `docs/index.md` describe this repository instead of the template placeholders.

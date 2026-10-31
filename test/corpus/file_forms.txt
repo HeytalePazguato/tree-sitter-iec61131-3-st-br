@@ -1,0 +1,299 @@
+================================================================================
+Program file with _INIT, _CYCLIC and _EXIT
+================================================================================
+
+PROGRAM _INIT
+    nCounter := 0;
+    state := PROBE_IDLE;
+    cmd.nSetpoint := 100;
+    pCounter := ADR(nCounter);
+END_PROGRAM
+
+PROGRAM _CYCLIC
+    rtrigStart(CLK := cmd.bStart);
+    IF bEnable AND (nCounter < 1000) THEN
+        nCounter := nCounter + nStep;
+    END_IF;
+    CASE state OF
+        PROBE_IDLE:
+            IF rtrigStart.Q THEN
+                state := PROBE_STARTING;
+            END_IF;
+        PROBE_RUNNING:
+            fbMotor(bEnable := TRUE, nSpeed := 10);
+        PROBE_STOPPING, PROBE_FAULT:
+            fbMotor(bEnable := FALSE, nSpeed := 0);
+    END_CASE;
+    nCounter := ProbeAdd(nA := nCounter, nB := 1);
+END_PROGRAM
+
+PROGRAM _EXIT
+    nCounter := 0;
+END_PROGRAM
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (program_declaration
+    (identifier)
+    (assignment_statement
+      (identifier)
+      (integer_literal))
+    (assignment_statement
+      (identifier)
+      (identifier))
+    (assignment_statement
+      (member_access_expression
+        (identifier)
+        (identifier))
+      (integer_literal))
+    (assignment_statement
+      (identifier)
+      (address_of_expression
+        (identifier))))
+  (program_declaration
+    (identifier)
+    (invocation_statement
+      (call_expression
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (member_access_expression
+              (identifier)
+              (identifier))))))
+    (if_statement
+      (binary_expression
+        (identifier)
+        (parenthesized_expression
+          (binary_expression
+            (identifier)
+            (integer_literal))))
+      (assignment_statement
+        (identifier)
+        (binary_expression
+          (identifier)
+          (identifier))))
+    (empty_statement)
+    (case_statement
+      (identifier)
+      (case_clause
+        (case_value
+          (identifier))
+        (if_statement
+          (member_access_expression
+            (identifier)
+            (identifier))
+          (assignment_statement
+            (identifier)
+            (identifier)))
+        (empty_statement))
+      (case_clause
+        (case_value
+          (identifier))
+        (invocation_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (named_argument
+                (identifier)
+                (boolean_literal))
+              (named_argument
+                (identifier)
+                (integer_literal))))))
+      (case_clause
+        (case_value
+          (identifier))
+        (case_value
+          (identifier))
+        (invocation_statement
+          (call_expression
+            (identifier)
+            (argument_list
+              (named_argument
+                (identifier)
+                (boolean_literal))
+              (named_argument
+                (identifier)
+                (integer_literal)))))))
+    (empty_statement)
+    (assignment_statement
+      (identifier)
+      (call_expression
+        (identifier)
+        (argument_list
+          (named_argument
+            (identifier)
+            (identifier))
+          (named_argument
+            (identifier)
+            (integer_literal))))))
+  (program_declaration
+    (identifier)
+    (assignment_statement
+      (identifier)
+      (integer_literal))))
+
+================================================================================
+Function library interface file
+================================================================================
+
+(* ProbeLib.fun *)
+
+FUNCTION_BLOCK FB_Motor
+    VAR_INPUT
+        bEnable : BOOL;
+        nSpeed : INT;
+    END_VAR
+    VAR_OUTPUT
+        bRunning : BOOL;
+    END_VAR
+END_FUNCTION_BLOCK
+
+FUNCTION F_Scale : REAL
+    VAR_INPUT
+        x : REAL;
+    END_VAR
+END_FUNCTION
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (function_block_declaration
+    (identifier)
+    (var_input
+      (variable_declaration
+        (identifier)
+        (elementary_type))
+      (variable_declaration
+        (identifier)
+        (elementary_type)))
+    (var_output
+      (variable_declaration
+        (identifier)
+        (elementary_type))))
+  (function_declaration
+    (identifier)
+    (elementary_type)
+    (var_input
+      (variable_declaration
+        (identifier)
+        (elementary_type)))))
+
+================================================================================
+Function block implementation file
+================================================================================
+
+FUNCTION_BLOCK FB_Motor
+    IF bEnable THEN
+        bRunning := TRUE;
+        nTicks := nTicks + 1;
+    ELSE
+        bRunning := FALSE;
+    END_IF;
+END_FUNCTION_BLOCK
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_block_declaration
+    (identifier)
+    (if_statement
+      (identifier)
+      (assignment_statement
+        (identifier)
+        (boolean_literal))
+      (assignment_statement
+        (identifier)
+        (binary_expression
+          (identifier)
+          (integer_literal)))
+      (else_clause
+        (assignment_statement
+          (identifier)
+          (boolean_literal))))
+    (empty_statement)))
+
+================================================================================
+Data type file with struct and enum
+================================================================================
+
+TYPE
+    ProbeState_enum :
+        (
+            PROBE_IDLE := 0,
+            PROBE_STARTING := 1,
+            PROBE_RUNNING := 2,
+            PROBE_FAULT := 99
+        );
+
+    ProbeCmd_typ : STRUCT
+        bStart : BOOL;
+        nSetpoint : INT := 100;
+        sLabel : STRING := 'cmd';
+        aValues : ARRAY[0..3] OF REAL;
+    END_STRUCT;
+END_TYPE
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_declaration
+    (type_definition
+      (identifier)
+      (enumerated_type_inline
+        (enumerator
+          (identifier)
+          (integer_literal))
+        (enumerator
+          (identifier)
+          (integer_literal))
+        (enumerator
+          (identifier)
+          (integer_literal))
+        (enumerator
+          (identifier)
+          (integer_literal))))
+    (type_definition
+      (identifier)
+      (structure_type_inline
+        (structure_field
+          (identifier)
+          (elementary_type))
+        (structure_field
+          (identifier)
+          (elementary_type)
+          (integer_literal))
+        (structure_field
+          (identifier)
+          (string_type)
+          (string_literal))
+        (structure_field
+          (identifier)
+          (array_type
+            (subrange
+              (integer_literal)
+              (integer_literal))
+            (elementary_type)))))))
+
+================================================================================
+Identifiers differing only in case stay plain identifiers
+================================================================================
+
+PROGRAM _CYCLIC
+    myVar := 1;
+    MyVar := 2;
+END_PROGRAM
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (program_declaration
+    (identifier)
+    (assignment_statement
+      (identifier)
+      (integer_literal))
+    (assignment_statement
+      (identifier)
+      (integer_literal))))
